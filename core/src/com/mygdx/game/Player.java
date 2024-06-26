@@ -1,19 +1,30 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+
 public class Player {
     private final int fov = 60;
-    private float x = 2, y = 2;
-    private int angle = 90;
+    private double x = 2, y = 2;
+    private double angle = 90;
+    double movement = 0.1;
+    double rotation = 5;
+    Utils utils = new Utils();
+    int[][] map;
 
-    public void setAngle(int angle) {
+    public Player(int[][] map) {
+        this.map = map;
+    }
+
+    public void setAngle(double angle) {
         this.angle = angle;
     }
 
-    public void setY(float y) {
+    public void setY(double y) {
         this.y = y;
     }
 
-    public void setX(float x) {
+    public void setX(double x) {
         this.x = x;
     }
 
@@ -22,19 +33,60 @@ public class Player {
     }
 
     public int getHalfFov() {
-        int halfFov = fov / 2;
-        return halfFov;
+        return fov / 2;
     }
 
-    public float getX() {
+    public double getX() {
         return x;
     }
 
-    public float getY() {
+    public double getY() {
         return y;
     }
 
-    public int getAngle() {
+    public double getAngle() {
         return angle;
+    }
+
+    public void movement() {
+        if ((Gdx.input.isKeyPressed(Input.Keys.W) && Gdx.input.isKeyPressed(Input.Keys.A)) || (Gdx.input.isKeyPressed(Input.Keys.W) && Gdx.input.isKeyPressed(Input.Keys.D)) || Gdx.input.isKeyPressed(Input.Keys.W)) {
+
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                setAngle(getAngle() - rotation);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                setAngle(getAngle() + rotation);
+            }
+            double playerCos = Math.cos(utils.degreeToRadians(getAngle())) * movement;
+            double playerSin = Math.sin(utils.degreeToRadians(getAngle())) * movement;
+
+            double newX = getX() + playerCos;
+            double newY = getY() + playerSin;
+            if (map[(int) Math.floor(newY)][(int) Math.floor(newX)] == 0) {
+                setX(newX);
+                setY(newY);
+            }
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.S) && Gdx.input.isKeyPressed(Input.Keys.A)) || (Gdx.input.isKeyPressed(Input.Keys.S) && Gdx.input.isKeyPressed(Input.Keys.D)) || Gdx.input.isKeyPressed(Input.Keys.S)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                setAngle(getAngle() - rotation);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                setAngle(getAngle() + rotation);
+            }
+
+            double playerCos = Math.cos(utils.degreeToRadians(getAngle())) * movement;
+            double playerSin = Math.sin(utils.degreeToRadians(getAngle())) * movement;
+
+            double newX = getX() - playerCos;
+            double newY = getY() - playerSin;
+            if (map[(int) Math.floor(newY)][(int) Math.floor(newX)] == 0) {
+                setX(newX);
+                setY(newY);
+            }
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            setAngle(getAngle() - rotation);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            setAngle(getAngle() + rotation);
+        }
     }
 }
