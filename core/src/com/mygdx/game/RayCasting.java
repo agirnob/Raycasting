@@ -4,20 +4,27 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RayCasting {
     private Player player;
     private float incrementAngle;
     private final int precision = 128;
     private final int[][] map;
     private ShapeRenderer shape;
-    private Texture texture;
+    private List<Texture> textures = new ArrayList<>();
 
-    public RayCasting(Player player, int[][] map, ShapeRenderer shapeRenderer) {
+    public RayCasting(Player player, int[][] map, ShapeRenderer shapeRenderer, ArrayList<Texture> textures) {
         this.player = player;
         this.incrementAngle = (float) player.getFov() / Gdx.graphics.getWidth();
         this.map = map;
         this.shape = shapeRenderer;
-        this.texture = new Texture();
+        for (Texture t : textures) {
+
+            this.textures.add(t);
+        }
+
 
     }
 
@@ -43,8 +50,7 @@ public class RayCasting {
 
             int wallHeight = (int) Math.floor(((double) Gdx.graphics.getHeight() / 2) / distance);
 
-
-            double texturepositionX = (double) Math.floor((texture.getWidth() * (ray.x + ray.y)) % texture.getWidth());
+            double texturepositionX = (double) Math.floor((textures.get(wall - 1).getWidth() * (ray.x + ray.y)) % textures.get(wall - 1).getWidth());
 
 
             shape.setColor(Color.DARK_GRAY);
@@ -54,7 +60,7 @@ public class RayCasting {
             shape.setColor(Color.CYAN);
             shape.line(rayCount, (float) Gdx.graphics.getHeight() / 2, rayCount, Gdx.graphics.getHeight());
 
-            drawTexture(rayCount, wallHeight, texturepositionX, texture);
+            drawTexture(rayCount, wallHeight, texturepositionX, textures.get(wall - 1));
 
             rayAngle += incrementAngle;
         }
