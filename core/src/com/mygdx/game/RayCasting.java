@@ -9,9 +9,10 @@ import java.util.List;
 
 public class RayCasting {
     private final Player player;
-    private float incrementAngle;
+    private final float incrementAngle;
     private final int[][] map;
     private ShapeRenderer shape;
+    @SuppressWarnings("final")
     private List<Texture> textures = new ArrayList<>();
 
     public RayCasting(Player player, int[][] map, ShapeRenderer shapeRenderer, ArrayList<Texture> textures) {
