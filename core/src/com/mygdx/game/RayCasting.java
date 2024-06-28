@@ -69,7 +69,7 @@ public class RayCasting {
         double y = ((double) Gdx.graphics.getHeight() / 2) - wallHeight;
 
         for (int i = texture.getHeight()-1; i >= 0; i--) {
-            shape.setColor(texture.getColors()[texture.getBitmap()[i][(int)texturepositionX]]);
+            shape.setColor(texture.getColors().get(texture.getBitmap()[i][(int) texturepositionX]));
             shape.line((float) x, (float) y, (float) x, (float) (y + yIncrementer));
             y += yIncrementer;
         }
