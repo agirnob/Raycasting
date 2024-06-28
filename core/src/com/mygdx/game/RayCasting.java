@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RayCasting {
-    private Player player;
+    private final Player player;
     private float incrementAngle;
-    private final int precision = 128;
     private final int[][] map;
     private ShapeRenderer shape;
     private List<Texture> textures = new ArrayList<>();
@@ -20,10 +19,7 @@ public class RayCasting {
         this.incrementAngle = (float) player.getFov() / Gdx.graphics.getWidth();
         this.map = map;
         this.shape = shapeRenderer;
-        for (Texture t : textures) {
-
-            this.textures.add(t);
-        }
+        this.textures.addAll(textures);
 
 
     }
@@ -33,6 +29,7 @@ public class RayCasting {
         Ray ray = new Ray(); // might cause problems didnt like it
         Utils utils = new Utils();
         shape.begin(ShapeRenderer.ShapeType.Line);
+        int precision = 128;
         for (int rayCount = 0; rayCount < Gdx.graphics.getWidth(); rayCount++) {
             ray.x = player.getX();
             ray.y = player.getY();
@@ -50,7 +47,7 @@ public class RayCasting {
 
             int wallHeight = (int) Math.floor(((double) Gdx.graphics.getHeight() / 2) / distance);
 
-            double texturepositionX = (double) Math.floor((textures.get(wall - 1).getWidth() * (ray.x + ray.y)) % textures.get(wall - 1).getWidth());
+            double texturepositionX = Math.floor((textures.get(wall - 1).getWidth() * (ray.x + ray.y)) % textures.get(wall - 1).getWidth());
 
 
             shape.setColor(Color.DARK_GRAY);
@@ -65,14 +62,6 @@ public class RayCasting {
             rayAngle += incrementAngle;
         }
         shape.end();
-    }
-
-    public void setIncrementAngle(float incrementAngle) {
-        this.incrementAngle = incrementAngle;
-    }
-
-    public float getIncrementAngle() {
-        return incrementAngle;
     }
 
     public void drawTexture(int x, int wallHeight, double texturepositionX, Texture texture) {

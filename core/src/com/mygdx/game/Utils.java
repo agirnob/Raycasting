@@ -66,6 +66,7 @@ public class Utils {
         File folder =  new File("/home/nerd/Downloads/raycasting/assets");
         File[] files = folder.listFiles();
         textures.add(new com.mygdx.game.Texture());
+        assert files != null;
         for (File file : files) {
             com.mygdx.game.Texture myTexture = null;
             if (file.isFile()) {
@@ -73,6 +74,7 @@ public class Utils {
                 myTexture = new com.mygdx.game.Texture(badTexture);
                 textures.add(myTexture);
             }
+            assert myTexture != null;
             System.out.println(Arrays.toString(myTexture.getUniquePixmapValues()));
         }
 
