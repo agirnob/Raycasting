@@ -12,7 +12,6 @@ public class RayCasting {
     private final float incrementAngle;
     private final int[][] map;
     private ShapeRenderer shape;
-    @SuppressWarnings("final")
     private List<Texture> textures = new ArrayList<>();
 
     public RayCasting(Player player, int[][] map, ShapeRenderer shapeRenderer, ArrayList<Texture> textures) {
@@ -55,7 +54,7 @@ public class RayCasting {
             shape.line(rayCount, 0, rayCount, ((float) Gdx.graphics.getHeight() / 2));
 
 
-            shape.setColor(Color.CYAN);
+            shape.setColor(Color.BLACK);
             shape.line(rayCount, (float) Gdx.graphics.getHeight() / 2, rayCount, Gdx.graphics.getHeight());
 
             drawTexture(rayCount, wallHeight, texturepositionX, textures.get(wall - 1));
@@ -70,12 +69,18 @@ public class RayCasting {
         double y = ((double) Gdx.graphics.getHeight() / 2) - wallHeight;
 
         for (int i = texture.getHeight()-1; i >= 0; i--) {
+
             shape.setColor(texture.getColors().get(texture.getBitmap()[i][(int) texturepositionX]));
             shape.line((float) x, (float) y, (float) x, (float) (y + yIncrementer));
             y += yIncrementer;
         }
 
     }
+
+    public void drawLine(double x1, double x2, double y1, double y2, Color color){
+
+    }
+
 
 
     class Ray {

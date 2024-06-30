@@ -2,91 +2,80 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Player {
+    @Getter
     private final int fov = 60;
-    private double x = 2, y = 2;
-    private double angle = 90;
     double movement = 0.1;
     double rotation = 5;
     Utils utils = new Utils();
     int[][] map;
 
+    @Getter
+    @Setter
+    private double x = 2, y = 2;
+
+    @Getter
+    @Setter
+    private double angle = 90;
+    private double radious = 10;
+
     public Player(int[][] map) {
         this.map = map;
-    }
 
-    public void setAngle(double angle) {
-        this.angle = angle;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public int getFov() {
-        return fov;
     }
 
     public int getHalfFov() {
         return fov / 2;
     }
 
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public double getAngle() {
-        return angle;
-    }
-
     public void movement() {
-        if ((Gdx.input.isKeyPressed(Input.Keys.W) && Gdx.input.isKeyPressed(Input.Keys.A)) || (Gdx.input.isKeyPressed(Input.Keys.W) && Gdx.input.isKeyPressed(Input.Keys.D)) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                setAngle(getAngle() - rotation);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                setAngle(getAngle() + rotation);
-            }
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             double playerCos = Math.cos(utils.degreeToRadians(getAngle())) * movement;
             double playerSin = Math.sin(utils.degreeToRadians(getAngle())) * movement;
-
             double newX = getX() + playerCos;
             double newY = getY() + playerSin;
-            if (map[(int) Math.floor(newY)][(int) Math.floor(newX)] == 0) {
-                setX(newX);
+
+            double checkX = Math.floor(newX + playerCos * radious);
+            double checkY = Math.floor(newY + playerSin * radious);
+
+            if (map[(int) checkY][(int) Math.floor((getX()))] == 0) {
                 setY(newY);
             }
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.S) && Gdx.input.isKeyPressed(Input.Keys.A)) || (Gdx.input.isKeyPressed(Input.Keys.S) && Gdx.input.isKeyPressed(Input.Keys.D)) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                setAngle(getAngle() - rotation);
+            if (map[(int) Math.floor(getY())][(int) checkX] == 0) {
+                setX(newX);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                setAngle(getAngle() + rotation);
-            }
-
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             double playerCos = Math.cos(utils.degreeToRadians(getAngle())) * movement;
             double playerSin = Math.sin(utils.degreeToRadians(getAngle())) * movement;
-
             double newX = getX() - playerCos;
             double newY = getY() - playerSin;
-            if (map[(int) Math.floor(newY)][(int) Math.floor(newX)] == 0) {
-                setX(newX);
+
+            double checkX = Math.floor(newX - playerCos * radious);
+            double checkY = Math.floor(newY - playerSin * radious);
+
+            if (map[(int) checkY][(int) Math.floor((getX()))] == 0) {
                 setY(newY);
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            if (map[(int) Math.floor(getY())][(int) checkX] == 0) {
+                setX(newX);
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             setAngle(getAngle() - rotation);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            angle = angle % 360;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             setAngle(getAngle() + rotation);
+            angle = angle % 360;
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.Q)){
+            Gdx.app.exit();
+            System.exit(-1);
         }
     }
 }
